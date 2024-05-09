@@ -1,7 +1,5 @@
-import { useState } from "react"
+import { useState, useContext, createContext } from "react"
 
-export const AdminPerms = () => {
-    const [admin, setAdmin] = useState(true)
-
-    return admin
+export const IsUserAdmin = () => {
+    return true
 }
