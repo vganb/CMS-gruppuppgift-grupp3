@@ -1,5 +1,4 @@
-'use client'
-import EventList from "@/components/EventList"
+
 import { Button } from "@/components/ui/button"
 
 import Link from "next/link"
@@ -11,9 +10,15 @@ const HomePage = () => {
       <Link href= "/sign-in">
         Sign in
       </Link>
+      </Button>
+
+      <Button asChild className="mr-5">
+      <Link href="/evenemang/create">
+          Add Evenemang
+      </Link>
       </Button> 
       <div className="py-5">
-      <EventList/>
+      
       </div> 
     </div>
     
@@ -21,4 +26,3 @@ const HomePage = () => {
 }
 export default HomePage
 
-// TEST MERGE COMMENT

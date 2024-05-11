@@ -1,19 +1,17 @@
 
-import { db } from "@/app/firebase.config";
-import {collection, getDocs } from "firebase/firestore";
+import { db } from "@/firebase.config";
+import { addDoc, collection } from "firebase/firestore";
 
-export default async function getEvents() {
-  const eventsCollection = collection(db, 'events');
-  const eventsSnapshot = await getDocs(eventsCollection);
+export async function addEvent(eventData) {
+  try {
+    const eventsCollection = collection( db, 'events');
+    const docRef = await addDoc(eventsCollection, eventData);
 
-  const events = [];
+    console.log("Event added with ID: ", docRef.id);
 
-  eventsSnapshot.forEach(doc => {
-    events.push({
-      id: doc.id,
-      ...doc.data()
-    });
-  });
-
-  return events;
+    return docRef.id; // Return the ID of the newly added event
+  } catch (error) {
+    console.error("Error adding event: ", error);
+    return null;
+  }
 }
