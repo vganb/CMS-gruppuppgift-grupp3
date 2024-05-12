@@ -1,6 +1,6 @@
-
 import { db } from "@/firebase.config";
 import { addDoc, collection } from "firebase/firestore";
+
 
 export async function addEvent(eventData) {
   try {

@@ -12,11 +12,6 @@ const HomePage = () => {
       </Link>
       </Button>
 
-      <Button asChild className="mr-5">
-      <Link href="/evenemang/create">
-          Add Evenemang
-      </Link>
-      </Button> 
       <div className="py-5">
       
       </div> 
