@@ -1,6 +1,6 @@
 
 
-import { addEvent } from "@/lib/getCollection";
+/*import { addEvent } from "@/lib/getCollection";
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
@@ -15,4 +15,4 @@ export default async function handler(req, res) {
   } else {
     return res.status(405).json({ error: 'Method Not Allowed' }); // Returnera felmeddelande om metoden inte är tillåten
   }
-}
+}*/

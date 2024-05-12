@@ -1,17 +1,35 @@
+
 import { db } from "@/firebase.config";
-import { addDoc, collection } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 
-
-export async function addEvent(eventData) {
+export async function getEvents() {
   try {
-    const eventsCollection = collection( db, 'events');
-    const docRef = await addDoc(eventsCollection, eventData);
-
-    console.log("Event added with ID: ", docRef.id);
-
-    return docRef.id; // Return the ID of the newly added event
+    const eventsCollection = collection(db, 'events');
+    const querySnapshot = await getDocs(eventsCollection);
+    const eventsData = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+    return eventsData;
   } catch (error) {
-    console.error("Error adding event: ", error);
-    return null;
+    console.error("Error fetching events: ", error);
+    return [];
   }
 }
+
+/*import { db } from "@/firebase/config";
+import { collection, getDocs, onSnapshot, q } from "firebase/firestore";
+
+export default async function getCollection(collectionName) {
+
+  const querySnapshot = await getDocs(collection(db, collectionName))
+
+    const documents = []
+    
+    querySnapshot.forEach(doc => {
+      documents.push({ id: doc.id, ...doc.data() })
+    })
+    
+    return documents
+}*/
+
