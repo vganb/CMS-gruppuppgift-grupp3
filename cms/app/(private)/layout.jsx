@@ -1,16 +1,12 @@
 'use client'
+import React from "react";
 
-import { useAuth } from "@clerk/nextjs"
+function LayoutPage({ children }) {
 
-const {user, authloaded} = useAuth()
+ 
 
-function LayoutPage({children}) {
-  
 
-    return (
-    <div>
-        {children}
-    </div>
-  )
+  return <div>{children}</div>;
 }
-export default LayoutPage
+
+export default LayoutPage;
