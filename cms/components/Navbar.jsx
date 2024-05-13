@@ -20,19 +20,31 @@ console.log(user)
         <div className="px-6 py-4 ">
           {/* <Links/> */}
           {isSignedIn ? (
-            <div className="flex gap-20">
+            <div className="flex gap-20 items-center text-white">
               Hello {user.fullName}!
                       <UserButton fallbackRedirectUrl="/" />
+              <div className="flex gap-5">
+              <Link  href={"/admin/create"}>
+                <button className="bg-slate-600 hover:bg-slate-700 px-4 py-2 rounded border">
+                  Create event
+                  </button>
+              </Link>
+              <Link  href={"/admin/dashboard"}>
+                <button className="bg-slate-600 hover:bg-slate-700 px-4 py-2 rounded border">
+                  Dashboard
+                  </button>
+              </Link>
+          </div>
             </div>
           ) : (
-            <div className="flex gap-8">
+            <div className="flex gap-8 items-center text-white">
               <Link href={"/sign-in"}>
-                <button className=" bg-slate-600 px-3 py-1 rounded border">
+                <button className=" bg-slate-600 hover:bg-slate-700 px-4 py-2 rounded border">
                   Login
                 </button>
               </Link>
               <Link href={"/sign-up"}>
-                <button className="bg-slate-600 px-3 py-1 rounded border">
+                <button className="bg-slate-600 hover:bg-slate-700 px-4 py-2 rounded border">
                   Sign Up
                 </button>
               </Link>
