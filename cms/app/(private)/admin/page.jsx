@@ -12,7 +12,7 @@ const ProtectedPage = () => {
     <div>
       <p>This user is an admin</p>
       <Button asChild className="mr-5">
-      <Link  href= "/admin/evenemang">
+      <Link  href= "/admin/evenemang/create">
           Add Evenemang
       </Link>
       </Button> 

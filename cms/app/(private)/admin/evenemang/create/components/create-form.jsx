@@ -1,7 +1,7 @@
-'use client'
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+// Uppdatera importen
 
 import { Button } from "@/components/ui/button";
 import {
@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/form";
 
 import { Input } from "@/components/ui/input";
-import { addEvent } from "@/lib/getCollection";
+import { getEvents } from "@/lib/getCollection";
 
 const formSchema = z.object({
   place: z.string().min(2).max(100),
@@ -36,11 +36,10 @@ export const CreateEventForm = () => {
     },
   });
 
-
   async function onSubmit(values) {
     try {
       // Anropa addEvent-funktionen med formulärdata
-      const eventId = await addEvent(values);
+      const eventId = await getEvents(values) // Använd async/await för att vänta på att addEvent ska slutföra
       console.log("Event added with ID: ", eventId);
     } catch (error) {
       console.error("Error adding event: ", error);

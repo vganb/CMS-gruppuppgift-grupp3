@@ -12,9 +12,6 @@ const HomePage = () => {
       </Link>
       </Button>
 
-      <div className="py-5">
-      
-      </div> 
     </div>
     
   )

@@ -1,6 +1,7 @@
 'use client'
-import Header from "@/app/(private)/admin/components/header";
+
 import React from "react";
+import Header from "./admin/components/header";
 
 function LayoutPage({ children }) {
 
