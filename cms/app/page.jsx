@@ -1,10 +1,12 @@
-import { UserButton } from "@clerk/nextjs"
+// import { UserButton } from "@clerk/nextjs"
 
 const HomePage = () => {
   return (
-    <div className="h-screen bg-slate-600">
-    <UserButton fallbackRedirectUrl="/"/>
+    <div className="h-screen overflow-auto bg-slate-600">
+  
+      <h1>BLABLABLA</h1>
     </div>
+
     
   )
 }
