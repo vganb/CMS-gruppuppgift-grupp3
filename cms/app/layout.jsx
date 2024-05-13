@@ -15,9 +15,14 @@ export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
     <html lang="en">
-        <body className={inter.className}>
-          <Navbar/>
-        {children}</body>
+    <body className={inter.className}>
+        <ImageContextProvider>
+            <ApiContextProvider>
+              <Navbar/>
+            {children}
+          </ApiContextProvider>
+        </ImageContextProvider>
+      <Toaster/></body>
     </html>
 
     </ClerkProvider>
