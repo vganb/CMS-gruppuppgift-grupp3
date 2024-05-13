@@ -1,7 +1,10 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from '@clerk/nextjs'
-import Navbar from "@/components/navbar/Navbar";
+import { Toaster } from "@/components/ui/toaster"; // Modified import statements
+import Navbar from "@/components/navbar/Navbar"; // Modified import statements
+import ApiContextProvider from "@/context/apiContext";
+import ImageContextProvider from "@/context/ImageContext";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -14,17 +17,17 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
-    <html lang="en">
-    <body className={inter.className}>
-        <ImageContextProvider>
+      <html lang="en">
+        <body className={inter.className}>
+          <ImageContextProvider>
             <ApiContextProvider>
               <Navbar/>
-            {children}
-          </ApiContextProvider>
-        </ImageContextProvider>
-      <Toaster/></body>
-    </html>
-
+              {children}
+              <Toaster/>
+            </ApiContextProvider>
+          </ImageContextProvider>
+        </body>
+      </html>
     </ClerkProvider>
   );
 }
