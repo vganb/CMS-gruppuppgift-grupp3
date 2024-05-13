@@ -4,6 +4,7 @@ import { ClerkProvider } from '@clerk/nextjs'
 import { Toaster } from "@/components/ui/toaster";
 import ApiContextProvider from "@/context/apiContext";
 import ImageContextProvider from "@/context/ImageContext";
+import Navbar from "@/components/Navbar";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -19,7 +20,8 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <ImageContextProvider>
-          <ApiContextProvider>
+            <ApiContextProvider>
+              <Navbar/>
             {children}
           </ApiContextProvider>
         </ImageContextProvider>
