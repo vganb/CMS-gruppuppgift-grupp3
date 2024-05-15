@@ -1,6 +1,7 @@
 "use client";
 
 import { UserButton, useUser } from "@clerk/nextjs";
+import Image from "next/image";
 import Link from "next/link";
 
 const Navbar = () => {
@@ -15,7 +16,13 @@ console.log(user)
     <div>
       <div className="flex justify-between border-b bg-slate-600/60">
         <Link href={"/"} className="text-4xl font-bold px-8 py-2">
-          Logo
+          <Image src="/klippiz.png"
+            className="rounded border-black"
+            width={50 }
+            height={50}
+            alt=""
+          
+          />
         </Link>
         <div className="px-6 py-4 ">
           {/* <Links/> */}
