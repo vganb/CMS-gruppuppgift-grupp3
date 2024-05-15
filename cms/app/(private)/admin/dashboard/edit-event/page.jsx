@@ -1,12 +1,14 @@
+
+
+
 import React from "react";
 
-function editEvents({data, onSaveEdit, handleChange}) {
-  
 
+function editEvents() {
   return (
-    <>
-   
-      <form className="max-w-md mx-auto mt-20">
+    <div className="flex flex-col items-center mt-8">
+      <h1>Redigera Event</h1>
+      <form className="max-w-md  mt-20">
         <div className="flex flex-wrap gap-4">
           <div>
             <label htmlFor="title" className="block">
@@ -16,8 +18,8 @@ function editEvents({data, onSaveEdit, handleChange}) {
               type="text"
               id="title"
               name="title"
-              onChange={e => handleChange(e.target.value, "title")}
-              value={data.title}
+              // onChange={}
+              // value={data.title}
               className="text-black w-full border rounded-md shadow-lg shadow-slate-700 px-3 py-2 hover:bg-slate-200 focus:bg-slate-300"
             />
           </div>
@@ -29,8 +31,8 @@ function editEvents({data, onSaveEdit, handleChange}) {
               type="text"
               id="location"
               name="location"
-              onChange={e => handleChange(e.target.value, "location")}
-              value={data.location}
+              // onChange={}
+              // value={data.location}
               className="text-black w-full border rounded-md shadow-lg shadow-slate-700 px-3 py-2 hover:bg-slate-200 focus:bg-slate-300"
             />
           </div>
@@ -42,8 +44,8 @@ function editEvents({data, onSaveEdit, handleChange}) {
               type="time"
               id="time"
               name="time"
-              onChange={e => handleChange(e.target.value, "time")}
-              value={data.time}
+              // onChange={}
+              //  value={data.time}
               className="text-black w-full border rounded-md shadow-lg shadow-slate-700 px-3 py-2 hover:bg-slate-200 focus:bg-slate-300"
             />
           </div>
@@ -55,8 +57,8 @@ function editEvents({data, onSaveEdit, handleChange}) {
               type="date"
               id="date"
               name="date"
-              onChange={e => handleChange(e.target.value, "date")}
-              value={data.date}
+              // onChange={}
+              // value={data.date}
               className="text-black w-full border rounded-md shadow-lg shadow-slate-700 px-3 py-2 hover:bg-slate-200 focus:bg-slate-300"
             />
           </div>
@@ -68,16 +70,15 @@ function editEvents({data, onSaveEdit, handleChange}) {
               type="number"
               id="bookings"
               name="bookings"
-              onChange={e => handleChange(e.target.value, "bokings")}
-              value={data.bookings}
+              // onChange={}
+              // value={data.bookings}
               className="text-black w-full border rounded-md shadow-lg shadow-slate-700 px-3 py-2 hover:bg-slate-200 focus:bg-slate-300"
             />
           </div>
-          <button onClick={onSaveEdit}>save</button>
-          <button onClick={gobacklink}>cancel</button>
+          <button >save</button>
         </div>
       </form>
-    </>
+    </div>
   );
 }
 
