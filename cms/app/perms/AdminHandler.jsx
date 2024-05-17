@@ -1,11 +1,11 @@
 "use server"
 
-import { checkRole } from "@/utils/roles";
+import { ServerAdminCheck, checkRole } from "./ServerAdminCheck";
 import { clerkClient } from "@clerk/nextjs/server";
 
-async function setRole(formData) {
+export default async function setRole(formData) {
   // Check that the user trying to set the role is an admin
-  if (!checkRole("admin")) {
+  if (!ServerAdminCheck) {
     return { message: "Not Authorized" };
   }
 
@@ -21,5 +21,3 @@ async function setRole(formData) {
     return { message: err };
   }
 }
-
-module.exports = { setRole };
