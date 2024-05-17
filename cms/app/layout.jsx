@@ -17,12 +17,10 @@ export default function RootLayout({ children }) {
     <ClerkProvider>
     <html lang="en">
       <body className={inter.className}>
-     
-     
+
               <Navbar/>
             {children}
-        
-        
+
       <Toaster/></body>
     </html>
 
