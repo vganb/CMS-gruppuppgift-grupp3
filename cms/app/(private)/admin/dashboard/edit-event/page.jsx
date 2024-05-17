@@ -20,7 +20,7 @@ function editEvents() {
               name="title"
               // onChange={}
               // value={data.title}
-              className="text-black w-full border rounded-md shadow-lg shadow-slate-700 px-3 py-2 hover:bg-slate-200 focus:bg-slate-300"
+              className="text-black w-full border rounded-md  px-3 py-2 "
             />
           </div>
           <div>
@@ -33,7 +33,7 @@ function editEvents() {
               name="location"
               // onChange={}
               // value={data.location}
-              className="text-black w-full border rounded-md shadow-lg shadow-slate-700 px-3 py-2 hover:bg-slate-200 focus:bg-slate-300"
+              className="text-black w-full border rounded-md  px-3 py-2 "
             />
           </div>
           <div>
@@ -46,7 +46,7 @@ function editEvents() {
               name="time"
               // onChange={}
               //  value={data.time}
-              className="text-black w-full border rounded-md shadow-lg shadow-slate-700 px-3 py-2 hover:bg-slate-200 focus:bg-slate-300"
+              className="text-black w-full border rounded-md  px-3 py-2 "
             />
           </div>
           <div>
@@ -59,7 +59,7 @@ function editEvents() {
               name="date"
               // onChange={}
               // value={data.date}
-              className="text-black w-full border rounded-md shadow-lg shadow-slate-700 px-3 py-2 hover:bg-slate-200 focus:bg-slate-300"
+              className="text-black w-full border rounded-md  px-3 py-2 "
             />
           </div>
           <div>
@@ -72,10 +72,14 @@ function editEvents() {
               name="bookings"
               // onChange={}
               // value={data.bookings}
-              className="text-black w-full border rounded-md shadow-lg shadow-slate-700 px-3 py-2 hover:bg-slate-200 focus:bg-slate-300"
+              className="text-black w-full border rounded-md  px-3 py-2 "
             />
           </div>
-          <button >save</button>
+          <div className="flex w-full ">
+
+          <button className=" capitalize border rounded-md bg-slate-600 p-2 w-1/2 text-white ">save</button>
+          <button className=" ml-4 text-sm p-2  text-red-700 ">Delete Event</button>
+          </div>
         </div>
       </form>
     </div>
