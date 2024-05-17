@@ -2,7 +2,6 @@
 import React, { useState } from 'react'
 import Dropzone from 'react-dropzone'
 import { cn } from "@/lib/utils";
-import { useImageContext } from '@/context/ImageContext';
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from '@/app/firebase.config';
 //Hur ska vi spara bilderna?
@@ -10,10 +9,10 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024 //5mb
 const FILE_TYPE = ['jpg','png','jpeg','webp','svg']
 
 
-export const FileDropZone = ({errorHandlerDropZone}) => {
+export const FileDropZone = ({errorHandlerDropZone,handleImageUpload}) => {
 
-const { setImage } = useImageContext()
 const [loading, setLoading] = useState(false)
+const [image, setImage] = useState(null)
 
 const uploadFile = async (file)=>{
 if(loading) return
@@ -23,9 +22,10 @@ try {
   // console.log(file)
  const fileRef = ref(storage,`images/${file.name}`) 
  const result = await uploadBytes(fileRef,file)
-console.log(result)
 
- setImage(file)
+ const downloadUrl = await getDownloadURL(fileRef)
+
+ handleImageUpload({url:downloadUrl,name:file.name})
 
 } catch (error) {
   console.error(error.message)
@@ -52,6 +52,7 @@ const onDrop = async (acceptedFiles) =>{
   }
   
   reader.onload = async => {
+     setImage(acceptedFiles[0].name)   
      uploadFile(file)
   }
   reader.readAsArrayBuffer(file)
@@ -75,7 +76,18 @@ const onDrop = async (acceptedFiles) =>{
 
   return (
     <section>
+      {
+      image ? 
       <div {...getRootProps()} className={cn('cursor-pointer p-10 bg-slate-400/60 hover:bg-slate-400/40'
+      ,isDragActive && 'bg-slate-400/40',
+      isDragReject && 'bg-red-500/10')}>
+        <input {...getInputProps()} />
+      <p className='text-white'>{image}</p>
+        {isDragReject && <p className='text-red-500'>Filetype not accepted</p>}
+        {isToLarge && <p className='text-white border bg-red-500 text-center'>The image file size is to large</p>}
+        {wrongFileType && <p className='text-white border bg-red-500 text-center'>Filetype not accepted </p>}
+      </div> :      
+       <div {...getRootProps()} className={cn('cursor-pointer p-10 bg-slate-400/60 hover:bg-slate-400/40'
       ,isDragActive && 'bg-slate-400/40',
       isDragReject && 'bg-red-500/10')}>
         <input {...getInputProps()} />
@@ -84,6 +96,7 @@ const onDrop = async (acceptedFiles) =>{
         {isToLarge && <p className='text-white border bg-red-500 text-center'>The image file size is to large</p>}
         {wrongFileType && <p className='text-white border bg-red-500 text-center'>Filetype not accepted </p>}
       </div>
+      }
     </section>
   )}}
 </Dropzone>
