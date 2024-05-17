@@ -1,50 +1,21 @@
-"use client"
-import {IsUserAdmin} from "@/perms/adminPerms"
-import { useState } from "react"
-import { useUser } from "@clerk/nextjs";
-import { Protect } from "@clerk/nextjs";
+
+import {IsUserAdmin, ServerAdminCheck} from "@/app/perms/ServerAdminCheck"
+import { redirect } from "next/navigation";
+//import {ServerAdminCheck} from '../app/perms/adminPerms.ts'
 
 
 const AdminPage = () => {
 
-  const { isSignedIn, user, isLoaded } = useUser();
-  console.log(user)
+  if (!ServerAdminCheck) {
+    redirect("/")
+  }
 
   return (
-    <Protect
-      permission="org:sys_memberships:manage"
-      fallback={<p>Only an admin can access this content.</p>}
-    >
-      <div>
-        <p>Welcome</p>
-      </div>
-    </Protect>
+    <>
+      <h1>This is the admin dashboard</h1>
+      <p>This page is restricted to users with the 'admin' role.</p>
+    </>
   )
-
-  /*if(IsUserAdmin && user) return (
-    <div>
-      <p>Hello admin {user.fullName}</p>
-    </div>
-  ) 
-  else if (user) return (
-    <div>
-      <p>{user.fullName}, you are not an admin</p>
-    </div>
-  ) 
-  else return (
-    <div>
-      <p>User is not logged in</p>
-    </div>
-  )*/
-
-  /*return (
-    <div>{IsUserAdmin ? (
-        <p>This user is an admin</p>
-      ) : (
-        <p>This user is not an admin</p>
-      )}
-      </div>
-  )*/
 }
 
 export default AdminPage
