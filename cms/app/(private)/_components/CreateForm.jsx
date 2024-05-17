@@ -14,11 +14,19 @@ import {
 import { FileDropZone } from './FileDropZone';
 import { validate } from '../admin/create/validate';
 import { useToast } from "@/components/ui/use-toast"
-import { useApiContext } from '@/context/apiContext';
-import { useImageContext } from '@/context/ImageContext';
+import { db } from '@/app/firebase.config';
+import { addDoc, collection, onSnapshot, query, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { useRouter } from 'next/navigation';
+import { auth } from '@clerk/nextjs/server';
+import { useAuth } from '@clerk/nextjs';
+
 
 
 export const CreateForm = () => {
+
+    const { userId } = useAuth()
+
+    const router = useRouter()
     const [error, setError] = useState('')
     const [startDate, setStartDate] = useState(new Date())
     const [form, setForm] = useState({
@@ -26,11 +34,14 @@ export const CreateForm = () => {
         date:'',
         time:'',
         seats:'',
+        imageUrl:'',
+        imageName:'',
+        description:'',
+        city:''
     })
 
-const { addEvent } = useApiContext()
+
 const {toast} = useToast()
-const { imageData } = useImageContext()
 
 const handleInputValue = (e) =>{
     const { name, value } = e.target
@@ -38,6 +49,11 @@ const handleInputValue = (e) =>{
         ...form,
         [name]:value,
     })
+}
+
+const handleImageUpload = async ({url,name}) =>{
+   
+ setForm({...form,imageUrl:url,imageName:name})
 }
 
 const handleDateSelection = (date) =>{
@@ -59,8 +75,8 @@ const handleSubmit = async (e) => {
         });
         return;
     }
-    
-    await addEvent(form,imageData)
+    await addDoc(collection(db,'events'),form)
+    router.push('/admin/dashboard')
 };
 
 const errorHandlerDropZone = (error) =>{
@@ -73,23 +89,23 @@ const errorHandlerDropZone = (error) =>{
 }
 
   return (
-    <div>
-        <form onSubmit={handleSubmit}>
-            <div className='p-10 border-2 container'>
+    <div className='my-10'>
+        <form className='' onSubmit={handleSubmit}>
+            <div className='flex justify-center items-center flex-col w-[500px] p-10 bg-emerald-500/40 border-2'>
                 <div>
                     <h1 className='text-center text-white font-bold text-2xl mb-5'>Create Event</h1>
                 </div>
-                <div className='flex justify-center items-center gap-4 mb-3 container'>
-                    <label className='text-white'>Title</label>
-                    <Input name='title' value={form.title} onChange={handleInputValue}/>
-                </div>
-                <div className='flex justify-center items-center gap-4 mb-3 container '>
-                    <label className='text-white'>Date</label>
+                        <label className='text-white flex justify-center items-center mb-3'>Title</label>
+                        <Input name='title' value={form.title} onChange={handleInputValue} placeholder='Enter a title'/>
+                        <label className='text-white flex justify-center items-center my-3'>City</label>
+                        <Input name='city' value={form.city} onChange={handleInputValue} placeholder='Ex. Stockholm'/>
+                <div className=''>
+                    <label className='text-white flex justify-center items-center my-3 container'>Date</label>
                         <Popover>
                             <PopoverTrigger asChild>
                                 <Button
                                 className={cn(
-                                    "w-1/3 justify-start text-left font-normal",
+                                    "justify-start text-left font-normal",
                                     !startDate && "text-muted-foreground"
                                 )}
                                 >
@@ -102,20 +118,26 @@ const errorHandlerDropZone = (error) =>{
                             </PopoverContent>
                         </Popover>
                    
-                        <label className='text-white'>Time</label>
-                        <Input name='time' value={form.time} onChange={handleInputValue}/>
-                    <label className='text-white'>Number&nbsp;of&nbsp;seats</label>
-                    <Input name='seats' value={form.seats} onChange={handleInputValue}/>
+                      
                 </div>
+                        <label className='text-white flex justify-center items-center my-3'>Number&nbsp;of&nbsp;seats</label>
+                        <Input className='' name='seats' value={form.seats} onChange={handleInputValue} placeholder='Ex. 2500'/>
+                        <label className='text-white flex justify-center items-center my-3'>Time</label>
+                        <Input name='time' value={form.time} onChange={handleInputValue} placeholder='Ex. 09.00'/>
+
+
+                        <label className='text-white flex justify-center items-center my-3'>Description</label>
+                        <Input name='description' value={form.description} onChange={handleInputValue} placeholder='Short description...'/>
+
                 <div className='flex justify-center items-center gap-4 mb-3 mt-10 container'>
                     <label className='text-white'>Image</label>
                     <div className=''>
-                        <FileDropZone errorHandlerDropZone={errorHandlerDropZone}/>
+                        <FileDropZone handleImageUpload={handleImageUpload} errorHandlerDropZone={errorHandlerDropZone}/>
                     </div>
                 </div>
                 {error && <p className='text-red-500'>{error}</p>}
-                <div className='flex justify-end container'>
-                    <Button>Create</Button>
+                <div className='flex justify-center items-center my-3'>
+                    <Button className='w-[400px] bg-slate-800 hover:bg-slate-700 transition-colors' >Create</Button>
                 </div>
             </div>
         </form>
