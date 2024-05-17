@@ -8,12 +8,12 @@ import { getStorage, ref, uploadBytes } from "firebase/storage";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: process.env.API_KEY,
-  authDomain: process.env.AUTH_DOMAIN,
-  projectId: process.env.PROJECT_ID,
-  storageBucket: "gs://event-bb7e9.appspot.com",
-  messagingSenderId: process.env.MESSAGGING_SENDER_ID,
-  appId: process.env.APP_ID
+  apiKey: "AIzaSyDT8WLethL6D17GwIyhLzKds-j4GLAC42w",
+  authDomain:"event-bb7e9.firebaseapp.com",
+  projectId:"event-bb7e9",
+  storageBucket:"gs://event-bb7e9.appspot.com",
+  messagingSenderId:"864944223301",
+  appId:"1:864944223301:web:4c358e3c28d07a137f9f2c"
 };
 
 // Initialize Firebase
