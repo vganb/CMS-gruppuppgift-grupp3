@@ -1,15 +1,35 @@
+'use client'
+import { db } from '@/app/firebase.config'
+import { doc, updateDoc } from '@firebase/firestore'
+import { useRouter } from 'next/navigation'
+import React, { useState } from 'react'
 
 
+function EditEventForm( {event} ) {
 
-import React from "react";
+  const router = useRouter()
+  /* const [title, setTitle] = useState(event.title)
+
+  const handleSubmit = async e => {
+    e.preventDefault()
+    if(title === '') return
+
+    try {
+      const eventRef = doc(db, 'events', event.id)
+      await updateDoc(eventRef, {title})
+      router.back()
+    } catch (error) {
+      console.error('Error updating doc');
+      
+    }
+    
+  }
+ */
 
 
-function editEvents() {
   return (
-    <div className="flex flex-col items-center mt-8">
-      <h1>Redigera Event</h1>
-      <form className="max-w-md  mt-20">
-        <div className="flex flex-wrap gap-4">
+    <form /* onSubmit={handleSubmit} */ className="w-1/4 bg-emerald-300 rounded-md p-8  mt-20">
+        <div className="flex flex-col flex-wrap gap-4">
           <div>
             <label htmlFor="title" className="block">
               Namn på event:
@@ -18,8 +38,9 @@ function editEvents() {
               type="text"
               id="title"
               name="title"
-              // onChange={}
-              // value={data.title}
+              /* value={title}
+              onChange={e => setTitle(e.target.value)} */
+              
               className="text-black w-full border rounded-md  px-3 py-2 "
             />
           </div>
@@ -77,13 +98,12 @@ function editEvents() {
           </div>
           <div className="flex w-full ">
 
-          <button className=" capitalize border rounded-md bg-slate-600 p-2 w-1/2 text-white ">save</button>
+          <button  className=" capitalize border rounded-md bg-slate-600 p-2 w-1/2 text-white ">save</button>
           <button className=" ml-4 text-sm p-2  text-red-700 ">Delete Event</button>
           </div>
         </div>
       </form>
-    </div>
-  );
+  )
 }
 
-export default editEvents;
+export default EditEventForm
