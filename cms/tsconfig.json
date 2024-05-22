@@ -31,7 +31,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-, "app/(private)/admin/adminpage/page.jsx"  ],
+, "app/(private)/admin/manage-users/page.jsx"  ],
   "exclude": [
     "node_modules"
   ]
