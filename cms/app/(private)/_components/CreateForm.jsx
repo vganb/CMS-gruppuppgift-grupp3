@@ -37,7 +37,8 @@ export const CreateForm = () => {
         imageUrl:'',
         imageName:'',
         description:'',
-        city:''
+        city:'',
+        attendees:[]
     })
 
 
