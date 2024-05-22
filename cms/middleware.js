@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {
   clerkMiddleware,
   createRouteMatcher
@@ -65,3 +66,12 @@ export const config = {
   matcher: ['/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)'],
 };
 
+=======
+import { clerkMiddleware } from "@clerk/nextjs/server";
+
+export default clerkMiddleware();
+
+export const config = {
+  matcher: ["/((?!.+.[w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+};
+>>>>>>> 32e54692adc20af4b3b04fedb5613f0f0d1a1235
