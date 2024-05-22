@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-import { getDoc, doc, setDoc, collection, updateDoc, arrayUnion } from '@firebase/firestore';
+import { getDoc, doc, setDoc, collection, updateDoc, arrayUnion, deleteDoc, arrayRemove } from '@firebase/firestore';
 import { db } from "@/app/firebase.config";
 
 export async function POST(req) {
   try {
-    const { email, eventId } = await req.json() 
+    const { email, eventId,unbookEvent} = await req.json() 
 
 
     if (!email || !eventId) {
@@ -21,12 +21,18 @@ export async function POST(req) {
     const eventData = docSnap.data();
     const availableSeats = parseInt(eventData.seats, 10); 
     const attendeesData = eventData.attendees || []; 
+    
 
-   
-    const isUserAlreadyBooked = attendeesData.includes(email)
-    console.log(isUserAlreadyBooked)
+    const isUserAlreadyBooked = attendeesData.includes(email);
+    if (isUserAlreadyBooked && unbookEvent.includes(email)) {
+
+      await updateDoc(docRef, { attendees: arrayRemove(email) });
+      return NextResponse.json({ message: 'Unbooking successful' });
+    }
+
     if (isUserAlreadyBooked) {
-      return NextResponse.json({ message: 'User has already booked for this event' }, { status: 400 })
+
+      return NextResponse.json({ message: 'User is already booked for this event. Specify unbookEvent parameter to unbook.' }, { status: 400 });
     }
 
     if (attendeesData.length >= availableSeats) {
