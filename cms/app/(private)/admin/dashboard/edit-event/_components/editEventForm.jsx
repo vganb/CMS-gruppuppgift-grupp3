@@ -1,12 +1,16 @@
 'use client';
 import { FileDropZone } from '@/app/(private)/_components/FileDropZone';
-import { db } from '@/app/firebase.config';
+
 import { doc, updateDoc } from '@firebase/firestore';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
+
+
+
+
 function EditEventForm({ event }) {
-  const router = useRouter();
+
   const [title, setTitle] = useState(event?.title || '');
   const [description, setDescription] = useState(event?.description || '');
   const [city, setCity] = useState(event?.city || '');
