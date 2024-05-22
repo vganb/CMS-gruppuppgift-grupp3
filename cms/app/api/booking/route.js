@@ -6,7 +6,7 @@ export async function POST(req) {
   try {
     const { email, eventId,unbookEvent} = await req.json() 
 
-
+ 
     if (!email || !eventId) {
       return NextResponse.json({ message: 'Please provide an email and eventId' }, { status: 400 });
     }
