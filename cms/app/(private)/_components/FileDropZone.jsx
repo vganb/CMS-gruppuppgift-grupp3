@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import Dropzone from 'react-dropzone'
 import { cn } from "@/lib/utils";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { storage } from '@/app/firebase.config';
+import { storage } from '@/firebase.config';
 //Hur ska vi spara bilderna?
 const MAX_FILE_SIZE = 5 * 1024 * 1024 //5mb
 const FILE_TYPE = ['jpg','png','jpeg','webp','svg']
