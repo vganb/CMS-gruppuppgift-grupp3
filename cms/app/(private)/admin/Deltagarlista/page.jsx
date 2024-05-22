@@ -1,19 +1,8 @@
 'use client'
 
-
-import { useAuth } from '@clerk/nextjs';
 import DeltagerList from './components/deltagerList';
-import { Table, TableCaption } from '@/components/ui/table';
 
 const DeltagarPage = () => {
-    
-    const { userId } = useAuth()
-
-    if (userId === null) return (
-        <Table>
-          <TableCaption>loading users ...</TableCaption>
-        </Table>
-      )
     
   return (
     <div>
