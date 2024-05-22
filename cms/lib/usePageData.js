@@ -1,6 +1,6 @@
 'use client'
 
-import { db } from "@/app/firebase.config";
+import { db } from "@/firebase.config";
 
 // hämta data om deltagare från Firebase-databasen
 const useDeltagarData = async () => {

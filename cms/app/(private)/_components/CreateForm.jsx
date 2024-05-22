@@ -14,7 +14,7 @@ import {
 import { FileDropZone } from './FileDropZone';
 import { validate } from '../admin/create/validate';
 import { useToast } from "@/components/ui/use-toast"
-import { db } from '@/app/firebase.config';
+import { db } from '@/firebase.config';
 import { addDoc, collection, onSnapshot, query, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import { auth } from '@clerk/nextjs/server';
@@ -37,7 +37,8 @@ export const CreateForm = () => {
         imageUrl:'',
         imageName:'',
         description:'',
-        city:''
+        city:'',
+        attendees:[]
     })
 
 
