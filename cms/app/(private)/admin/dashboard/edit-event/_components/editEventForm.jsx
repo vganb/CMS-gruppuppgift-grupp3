@@ -1,4 +1,5 @@
 'use client';
+import { FileDropZone } from '@/app/(private)/_components/FileDropZone';
 import { db } from '@/app/firebase.config';
 import { doc, updateDoc } from '@firebase/firestore';
 import { useRouter } from 'next/navigation';
@@ -8,42 +9,39 @@ function EditEventForm({ event }) {
   const router = useRouter();
   const [title, setTitle] = useState(event?.title || '');
   const [description, setDescription] = useState(event?.description || '');
-  const [location, setLocation] = useState(event?.location || '');
+  const [city, setCity] = useState(event?.city || '');
   const [time, setTime] = useState(event?.time || '');
   const [date, setDate] = useState(event?.date || '');
   const [seats, setSeats] = useState(event?.seats || '');
 
+  
+
+ 
   const handleSubmit = async e => {
     e.preventDefault();
     if (title === '' || description === '' || location === '' || time === '' || date === '' || seats === '') return;
 
-    try {
-      const eventRef = doc(db, 'events', event.id);
-      await updateDoc(eventRef, { title, description, location, time, date, seats });
-      router.back();
-    } catch (error) {
-      console.error('Error updating document:', error);
-    }
+    
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-1/3 bg-slate-800 rounded-md p-20 mt-20">
+    <form onSubmit={handleSubmit} className="w-1/3  bg-slate-800 rounded-md p-20 mt-20">
       <div className="flex flex-col flex-wrap gap-4">
         <div>
-          <label htmlFor="title" className="block">
+          <label htmlFor="title" className="block text-white font-semibold">
             Namn på event:
           </label>
           <input
             type="text"
             id="title"
             name="title"
-            value={title}
+            defaultValue={title}
             onChange={e => setTitle(e.target.value)}
             className="text-black w-full border rounded-md px-3 py-2"
           />
         </div>
         <div>
-          <label htmlFor="description" className="block">
+          <label htmlFor="description" className="block text-white font-semibold">
             Beskrivning
           </label>
           <textarea
@@ -56,20 +54,20 @@ function EditEventForm({ event }) {
           />
         </div>
         <div>
-          <label htmlFor="location" className="block">
+          <label htmlFor="city" className="block text-white font-semibold">
             Plats:
           </label>
           <input
             type="text"
-            id="location"
-            name="location"
-            value={location}
+            id="city"
+            name="city"
+            value={city}
             onChange={e => setLocation(e.target.value)}
             className="text-black w-full border rounded-md px-3 py-2"
           />
         </div>
         <div>
-          <label htmlFor="time" className="block">
+          <label htmlFor="time" className="block text-white font-semibold">
             Tid:
           </label>
           <input
@@ -82,7 +80,7 @@ function EditEventForm({ event }) {
           />
         </div>
         <div>
-          <label htmlFor="date" className="block">
+          <label htmlFor="date" className="block text-white font-semibold">
             Datum:
           </label>
           <input
@@ -95,7 +93,7 @@ function EditEventForm({ event }) {
           />
         </div>
         <div>
-          <label htmlFor="seats" className="block">
+          <label htmlFor="seats" className="block text-white font-semibold">
             Antal platser:
           </label>
           <input
@@ -107,6 +105,7 @@ function EditEventForm({ event }) {
             className="text-black w-full border rounded-md px-3 py-2"
           />
         </div>
+        
         <div className="flex w-full">
           <button type="submit" className="capitalize border rounded-md bg-slate-600 p-2 w-1/2 text-white">
             Save

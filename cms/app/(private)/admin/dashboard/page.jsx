@@ -1,4 +1,5 @@
 // app/(private)/admin/dashboard/page.jsx
+
 import React from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../firebase.config";
@@ -15,6 +16,8 @@ const fetchEvents = async () => {
 
 const Dashboard = async () => {
   const events = await fetchEvents();
+
+  
 
   return (
     <div className="min-h-screen bg-gray-100 py-6 px-4">
