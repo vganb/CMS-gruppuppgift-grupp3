@@ -1,7 +1,7 @@
 // app/(private)/admin/dashboard/page.jsx
 import React from 'react';
 import { collection, getDocs } from "firebase/firestore";
-import { db } from '../../../firebase.config';
+import { db } from '../../../../firebase.config';
 
 const fetchEvents = async () => {
   const eventsCollection = collection(db, "events");
