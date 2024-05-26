@@ -1,11 +1,8 @@
-// app/(private)/admin/dashboard/page.jsx
-
-import React from "react";
-import { collection, getDocs } from "firebase/firestore";
+'use client'
+import React, { useEffect, useState } from "react";
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "@/firebase.config";
 import Link from "next/link";
-
-
 
 const fetchEvents = async () => {
   const eventsCollection = collection(db, "events");
@@ -16,10 +13,21 @@ const fetchEvents = async () => {
   }));
 };
 
-const Dashboard = async () => {
-  const events = await fetchEvents();
+const Dashboard = () => {
+  const [events, setEvents] = useState([]);
 
-  
+  useEffect(() => {
+    const getEvents = async () => {
+      const fetchedEvents = await fetchEvents();
+      setEvents(fetchedEvents);
+    };
+    getEvents();
+  }, []);
+
+  const deleteEvent = async (eventId) => {
+    await deleteDoc(doc(db, "events", eventId));
+    setEvents(events.filter((event) => event.id !== eventId));
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 py-6 px-4">
@@ -31,15 +39,15 @@ const Dashboard = async () => {
             className="relative bg-white rounded-lg shadow-md overflow-hidden"
           >
             <div className="absolute top-0 right-0 p-2">
-              
-                <Link href={`/admin/dashboard/edit-event/${event.id}`}>
-                  <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded mr-2">
-                    Ändra
-                  </button>
-                  
-                </Link>
-              
-              <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded">
+              <Link href={`/admin/dashboard/edit-event/${event.id}`}>
+                <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-2 rounded mr-2">
+                  Ändra
+                </button>
+              </Link>
+              <button
+                onClick={() => deleteEvent(event.id)}
+                className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded"
+              >
                 Ta bort
               </button>
             </div>
