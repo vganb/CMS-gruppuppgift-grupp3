@@ -44,7 +44,7 @@ const EventPage = () => {
 
   return (
     <div className="flex flex-col items-center mt-8">
-      <h1>{event.title}</h1>
+      <h1 className="text-xl font-bold ">Edit Event</h1>
       <EditEventForm event={event} />
     </div>
   );

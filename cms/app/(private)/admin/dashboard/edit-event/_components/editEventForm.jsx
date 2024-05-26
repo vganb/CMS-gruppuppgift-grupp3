@@ -1,7 +1,7 @@
 'use client';
 
 
-import { doc, setDoc, updateDoc } from '@firebase/firestore';
+import { doc, setDoc,  } from '@firebase/firestore';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { db } from '@/firebase.config';
@@ -13,6 +13,8 @@ function EditEventForm({ event }) {
   const [time, setTime] = useState(event?.time || '');
   const [date, setDate] = useState(event?.date || '');
   const [seats, setSeats] = useState(event?.seats || '');
+  const [imageName, setImageName] = useState(event?.imageName || '');
+  const [imageUrl, setImageUrl] = useState(event?.imageUrl || '');
 
   const router = useRouter();
 
@@ -20,7 +22,7 @@ function EditEventForm({ event }) {
     e.preventDefault();
 
     // Ensure all required fields are filled
-    if (!title || !description || !city || !time || !date || !seats) {
+    if (!title || !description || !city || !time || !date || !seats || !imageName || !imageUrl) {
       alert('All fields are required.');
       return;
     }
@@ -37,6 +39,8 @@ function EditEventForm({ event }) {
         time,
         date,
         seats,
+        imageName,
+        imageUrl
       });
 
      
@@ -49,8 +53,34 @@ function EditEventForm({ event }) {
     }
   };
 
+
+
+  const handleDelete = async () => {
+    const confirmation = confirm('Are you sure you want to delete this event?');
+    if (!confirmation) return;
+
+    try {
+      // Reference to the event document
+      const eventRef = doc(db, 'events', event.id);
+
+      // Delete the event document
+      await deleteDoc(eventRef);
+
+      alert('Event deleted successfully');
+
+      // Redirect to the events page
+      router.push('/events');
+    } catch (error) {
+      console.error('Error deleting event: ', error);
+      alert('Failed to delete event. Please try again.');
+    }
+  };
+
+
+
+
   return (
-    <form onSubmit={handleSubmit} className="w-1/3 bg-slate-800 rounded-md p-20 mt-20">
+    <form onSubmit={handleSubmit} className="w-1/3 bg-slate-800 rounded-md p-20">
       <div className="flex flex-col flex-wrap gap-4">
         <div>
           <label htmlFor="title" className="block text-white font-semibold">
@@ -135,7 +165,7 @@ function EditEventForm({ event }) {
           <button type="submit" className="capitalize border rounded-md bg-slate-600 p-2 w-1/2 text-white">
             Save
           </button>
-          <button type="button" className="ml-4 text-sm p-2 text-red-700">
+          <button type="button" onClick={handleDelete} className="ml-4 text-sm p-2 text-red-700">
             Delete Event
           </button>
         </div>
