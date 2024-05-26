@@ -1,16 +1,12 @@
 'use client';
-import { FileDropZone } from '@/app/(private)/_components/FileDropZone';
 
-import { doc, updateDoc } from '@firebase/firestore';
+
+import { doc, setDoc, updateDoc } from '@firebase/firestore';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
-
-
-
-
+import { db } from '@/firebase.config';
 
 function EditEventForm({ event }) {
-
   const [title, setTitle] = useState(event?.title || '');
   const [description, setDescription] = useState(event?.description || '');
   const [city, setCity] = useState(event?.city || '');
@@ -18,18 +14,43 @@ function EditEventForm({ event }) {
   const [date, setDate] = useState(event?.date || '');
   const [seats, setSeats] = useState(event?.seats || '');
 
-  
+  const router = useRouter();
 
- 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (title === '' || description === '' || location === '' || time === '' || date === '' || seats === '') return;
 
-    
+    // Ensure all required fields are filled
+    if (!title || !description || !city || !time || !date || !seats) {
+      alert('All fields are required.');
+      return;
+    }
+
+    try {
+      // Reference to the event document
+      const eventRef = doc(db, 'events', event.id);
+
+      // Update the event document with new data
+      await setDoc(eventRef, {
+        title,
+        description,
+        city,
+        time,
+        date,
+        seats,
+      });
+
+     
+
+      // Redirect to the events page
+      router.push('/admin/dashboard');
+    } catch (error) {
+      console.error('Error updating event: ', error);
+      alert('Failed to update event. Please try again.');
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-1/3  bg-slate-800 rounded-md p-20 mt-20">
+    <form onSubmit={handleSubmit} className="w-1/3 bg-slate-800 rounded-md p-20 mt-20">
       <div className="flex flex-col flex-wrap gap-4">
         <div>
           <label htmlFor="title" className="block text-white font-semibold">
@@ -39,7 +60,7 @@ function EditEventForm({ event }) {
             type="text"
             id="title"
             name="title"
-            defaultValue={title}
+            value={title}
             onChange={e => setTitle(e.target.value)}
             className="text-black w-full border rounded-md px-3 py-2"
           />
@@ -66,7 +87,7 @@ function EditEventForm({ event }) {
             id="city"
             name="city"
             value={city}
-            onChange={e => setLocation(e.target.value)}
+            onChange={e => setCity(e.target.value)}
             className="text-black w-full border rounded-md px-3 py-2"
           />
         </div>
@@ -109,7 +130,7 @@ function EditEventForm({ event }) {
             className="text-black w-full border rounded-md px-3 py-2"
           />
         </div>
-        
+
         <div className="flex w-full">
           <button type="submit" className="capitalize border rounded-md bg-slate-600 p-2 w-1/2 text-white">
             Save
