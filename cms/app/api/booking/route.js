@@ -21,19 +21,18 @@ export async function POST(req) {
     const eventData = docSnap.data();
     const availableSeats = parseInt(eventData.seats, 10); 
     const attendeesData = eventData.attendees || []; 
-    
-
     const isUserAlreadyBooked = attendeesData.includes(email);
-    if (isUserAlreadyBooked && unbookEvent.includes(email)) {
-
-      await updateDoc(docRef, { attendees: arrayRemove(email) });
-      return NextResponse.json({ message: 'Unbooking successful' });
+    
+    if(isUserAlreadyBooked && !unbookEvent){
+      return NextResponse.json({message:'Could not booking another ticket with the same email'})
     }
 
-    if (isUserAlreadyBooked) {
+     if (isUserAlreadyBooked && unbookEvent.includes(email)) {
 
-      return NextResponse.json({ message: 'User is already booked for this event. Specify unbookEvent parameter to unbook.' }, { status: 400 });
-    }
+       await updateDoc(docRef, { attendees: arrayRemove(email) });
+       return NextResponse.json({ message: 'Unbooking successful' });
+     }
+
 
     if (attendeesData.length >= availableSeats) {
       return NextResponse.json({ message: 'Booking is full' }, { status: 400 });
