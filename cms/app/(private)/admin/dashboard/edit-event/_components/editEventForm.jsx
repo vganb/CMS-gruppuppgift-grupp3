@@ -1,171 +1,214 @@
-'use client';
+"use client";
 
-
-import { doc, setDoc,  } from '@firebase/firestore';
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
-import { db } from '@/firebase.config';
+import { doc, setDoc, deleteDoc } from "@firebase/firestore";
+import {
+  ref,
+  deleteObject,
+  uploadBytes,
+  getDownloadURL,
+} from "@firebase/storage";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { db, storage } from "@/firebase.config";
 
 function EditEventForm({ event }) {
-  const [title, setTitle] = useState(event?.title || '');
-  const [description, setDescription] = useState(event?.description || '');
-  const [city, setCity] = useState(event?.city || '');
-  const [time, setTime] = useState(event?.time || '');
-  const [date, setDate] = useState(event?.date || '');
-  const [seats, setSeats] = useState(event?.seats || '');
-  const [imageName, setImageName] = useState(event?.imageName || '');
-  const [imageUrl, setImageUrl] = useState(event?.imageUrl || '');
-
   const router = useRouter();
+  const [formError, setFormError] = useState(null);
+  const [formData, setFormData] = useState({
+    title: event.title,
+    description: event.description,
+    city: event.city,
+    date: event.date,
+    time: event.time,
+    seats: event.seats,
+  });
+  const [selectedImage, setSelectedImage] = useState(null); // Change 1: Initial state to null
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setFormError(null);
 
-    // Ensure all required fields are filled
-    if (!title || !description || !city || !time || !date || !seats || !imageName || !imageUrl) {
-      alert('All fields are required.');
+    if (
+      !formData.title ||
+      !formData.description ||
+      !formData.city ||
+      !formData.date ||
+      !formData.time ||
+      !formData.seats
+    ) {
+      setFormError("All fields are required");
+      setTimeout(() => setFormError(null), 4000);
       return;
     }
 
     try {
-      // Reference to the event document
-      const eventRef = doc(db, 'events', event.id);
+      if (selectedImage) { // Change 2: Check if a new image is selected
+        if (event.imageName) {
+          const fileRef = ref(storage, `images/${event.imageName}`);
+          await deleteObject(fileRef); // Change 3: Delete existing image
+        }
 
-      // Update the event document with new data
-      await setDoc(eventRef, {
-        title,
-        description,
-        city,
-        time,
-        date,
-        seats,
-        imageName,
-        imageUrl
-      });
+        const fileRef = ref(storage, `images/${selectedImage.name}`);
+        await uploadBytes(fileRef, selectedImage); // Change 4: Upload new image directly
+        const downloadURL = await getDownloadURL(fileRef);
 
-     
+        await updateDocument("events", event.id, {
+          ...formData,
+          attendees: event.attendees,
+          imageUrl: downloadURL, // Change 5: Update document with new image URL
+          imageName: selectedImage.name, // Change 6: Update document with new image name
+        });
+      } else {
+        await updateDocument("events", event.id, {
+          ...formData,
+          attendees: event.attendees,
+        });
+      }
 
-      // Redirect to the events page
-      router.push('/admin/dashboard');
-    } catch (error) {
-      console.error('Error updating event: ', error);
-      alert('Failed to update event. Please try again.');
+      router.push("/admin/dashboard");
+    } catch (err) {
+      console.error(err.message);
+      setFormError("Something went wrong, please try again later");
     }
   };
 
+  const updateDocument = async (collection, id, data) => {
+    try {
+      const docRef = doc(db, collection, id);
+      await setDoc(docRef, data, { merge: true });
+    } catch (err) {
+      console.error("Error:", err);
+      setFormError("Failed to update document");
+    }
+  };
 
+  const onChange = (e) => {
+    setFormData((data) => ({
+      ...data,
+      [e.target.id]: e.target.value,
+    }));
+  };
 
   const handleDelete = async () => {
-    const confirmation = confirm('Are you sure you want to delete this event?');
-    if (!confirmation) return;
-
     try {
-      // Reference to the event document
-      const eventRef = doc(db, 'events', event.id);
-
-      // Delete the event document
-      await deleteDoc(eventRef);
-
-      alert('Event deleted successfully');
-
-      // Redirect to the events page
-      router.push('/events');
-    } catch (error) {
-      console.error('Error deleting event: ', error);
-      alert('Failed to delete event. Please try again.');
+      const docRef = doc(db, "events", event.id);
+      await deleteDoc(docRef);
+      router.push("/admin/dashboard");
+    } catch (err) {
+      console.error("Error:", err);
+      setFormError("Failed to delete event");
     }
   };
 
-
-
-
   return (
-    <form onSubmit={handleSubmit} className="w-1/3 bg-slate-800 rounded-md p-20">
+    <form onSubmit={handleSubmit} className="bg-slate-800 rounded-md p-20">
       <div className="flex flex-col flex-wrap gap-4">
+        {formError && <p className="text-red-500">{formError}</p>}
         <div>
           <label htmlFor="title" className="block text-white font-semibold">
-            Namn på event:
+            Event Name:
           </label>
           <input
             type="text"
             id="title"
             name="title"
-            value={title}
-            onChange={e => setTitle(e.target.value)}
+            value={formData.title}
+            onChange={onChange}
             className="text-black w-full border rounded-md px-3 py-2"
           />
         </div>
         <div>
-          <label htmlFor="description" className="block text-white font-semibold">
-            Beskrivning
+          <label
+            htmlFor="description"
+            className="block text-white font-semibold"
+          >
+            Description:
           </label>
           <textarea
-            type="text"
             id="description"
             name="description"
-            value={description}
-            onChange={e => setDescription(e.target.value)}
+            value={formData.description}
+            onChange={onChange}
             className="text-black w-full border rounded-md px-3 py-2"
           />
         </div>
         <div>
           <label htmlFor="city" className="block text-white font-semibold">
-            Plats:
+            City:
           </label>
           <input
             type="text"
             id="city"
             name="city"
-            value={city}
-            onChange={e => setCity(e.target.value)}
-            className="text-black w-full border rounded-md px-3 py-2"
-          />
-        </div>
-        <div>
-          <label htmlFor="time" className="block text-white font-semibold">
-            Tid:
-          </label>
-          <input
-            type="time"
-            id="time"
-            name="time"
-            value={time}
-            onChange={e => setTime(e.target.value)}
+            value={formData.city}
+            onChange={onChange}
             className="text-black w-full border rounded-md px-3 py-2"
           />
         </div>
         <div>
           <label htmlFor="date" className="block text-white font-semibold">
-            Datum:
+            Date:
           </label>
           <input
             type="date"
             id="date"
             name="date"
-            value={date}
-            onChange={e => setDate(e.target.value)}
+            value={formData.date}
+            onChange={onChange}
+            className="text-black w-full border rounded-md px-3 py-2"
+          />
+        </div>
+        <div>
+          <label htmlFor="time" className="block text-white font-semibold">
+            Time:
+          </label>
+          <input
+            type="time"
+            id="time"
+            name="time"
+            value={formData.time}
+            onChange={onChange}
             className="text-black w-full border rounded-md px-3 py-2"
           />
         </div>
         <div>
           <label htmlFor="seats" className="block text-white font-semibold">
-            Antal platser:
+            Seats:
           </label>
           <input
             type="number"
             id="seats"
             name="seats"
-            value={seats}
-            onChange={e => setSeats(e.target.value)}
+            value={formData.seats}
+            onChange={onChange}
             className="text-black w-full border rounded-md px-3 py-2"
           />
         </div>
-
+        <div>
+          <label htmlFor="imageName" className="block text-white font-semibold">
+            Event Image:
+          </label>
+          <input
+            type="file"
+            id="imageName"
+            name="imageName"
+            accept="image/*"
+            onChange={(e) => setSelectedImage(e.target.files[0])} // Change 7: Set selectedImage state with the selected file object
+            className="text-white w-full border rounded-md px-3 py-2"
+          />
+        </div>
         <div className="flex w-full">
-          <button type="submit" className="capitalize border rounded-md bg-slate-600 p-2 w-1/2 text-white">
+          <button
+            type="submit"
+            className="capitalize border rounded-md bg-slate-600 p-2 w-1/2 text-white"
+          >
             Save
           </button>
-          <button type="button" onClick={handleDelete} className="ml-4 text-sm p-2 text-red-700">
+          <button
+            type="button"
+            onClick={handleDelete}
+            className="ml-4 text-sm p-2 text-red-700"
+          >
             Delete Event
           </button>
         </div>
