@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getDoc, doc, updateDoc, arrayUnion } from '@firebase/firestore';
+import { getDoc, doc, updateDoc, arrayUnion, increment } from '@firebase/firestore';
 import { db } from "@/firebase.config";
 
 export async function POST(req) {
@@ -29,7 +29,10 @@ export async function POST(req) {
       return NextResponse.json({ message: 'Booking is full' }, { status: 400 });
     }
 
-    await updateDoc(docRef, { attendees: arrayUnion(email) });
+    await updateDoc(docRef, { 
+      attendees: arrayUnion(email),
+      seats: increment(-1)
+    });
 
     return NextResponse.json({ message: 'Booking successful' }, { status: 200 });
 
@@ -38,5 +41,6 @@ export async function POST(req) {
     return NextResponse.json({ message: 'Could not book the event, please try again' }, { status: 500 });
   }
 }
+
 
 

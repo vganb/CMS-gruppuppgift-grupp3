@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getDoc, doc, updateDoc, arrayRemove } from '@firebase/firestore';
+import { getDoc, doc, updateDoc, arrayRemove, increment } from '@firebase/firestore';
 import { db } from "@/firebase.config";
 
 export async function DELETE(req) {
@@ -24,7 +24,10 @@ export async function DELETE(req) {
       return NextResponse.json({ message: 'User is not booked for this event' }, { status: 400 });
     }
 
-    await updateDoc(docRef, { attendees: arrayRemove(email) });
+    await updateDoc(docRef, { 
+      attendees: arrayRemove(email),
+      seats: increment(1)
+    });
 
     return NextResponse.json({ message: 'Unbooking successful' }, { status: 200 });
 
@@ -33,3 +36,4 @@ export async function DELETE(req) {
     return NextResponse.json({ message: 'Could not cancel the booking, please try again' }, { status: 500 });
   }
 }
+
