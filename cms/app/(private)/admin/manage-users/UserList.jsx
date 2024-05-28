@@ -1,19 +1,29 @@
 "use client"
 import React, { useState } from 'react';
-import {AddRole} from "./AddRole.jsx"
+import {AddRole} from "./AddRole.js"
+import { useUser } from '@clerk/nextjs';
 
 export default function UserList({ users }) {
 
-    const [ error, setError ] = useState('')
+    const { user } = useUser()
 
-    const handleSetAdmin = async (userId) => {
-        const response = await AddRole(userId, 'admin')
+    const [ status, setStatus ] = useState('')
+
+    const handleSetAdmin = async (userId, role) => {
+
+        if (userId === user.id) {
+            setStatus("You cannot change your own role");
+            return;
+        }
+
+        console.log({userId, role})
+        const response = await AddRole(userId, role)
         if (response.success) {
-        console.log(`User ${userId} role updated to admin`)
-        // Optionally, refresh the user list or update state to reflect the change
+        console.log(`User ${userId} role updated to ${role}`)
+        setStatus(`Promoted user with ID: ${userId} to admin`)
         } else {
         console.error(`Failed to update user ${userId} role to admin`)
-        setError(`Failed to promote user with ID: ${userId}`);
+        setStatus(`Failed to promote user with ID: ${userId}`);
         }
     }
 
@@ -28,14 +38,14 @@ export default function UserList({ users }) {
                     <p>{user.primaryEmailAddress}</p>
                 </div>
                 {user.publicMetadata?.role !== 'admin' && (
-                    <button className='adminBtn' onClick={() => handleSetAdmin(user.id)}>Set as Admin</button>
+                    <button className='adminBtn' onClick={() => handleSetAdmin(user.id, 'admin')}>Set as Admin</button>
                 )}
                 {user.publicMetadata?.role === 'admin' && (
-                    <p className='adminRole'>Admin</p>
+                    <p className='adminRole' onClick={() => handleSetAdmin(user.id, null)}>Admin</p>
                 )}
             </div>
         ))}
-        {error && <p>Status: {error}</p>}
+        {status && <p>Status: {status}</p>}
         </div>
     );
     }

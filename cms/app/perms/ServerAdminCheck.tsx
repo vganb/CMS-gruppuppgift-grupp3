@@ -21,5 +21,8 @@ export const ServerAdminCheck = () => {
 
     if(!isAdmin) {
         redirect('/')
-    } else return true
+    } else {
+        return true
+    } 
+    
 }
