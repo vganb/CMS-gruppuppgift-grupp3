@@ -54,4 +54,10 @@ body {
 .adminRole {
   margin-right: 1.7rem;
   color: yellow;
+
+  cursor: pointer;
+
+  &:hover {
+    color: red;
+  }
 }
