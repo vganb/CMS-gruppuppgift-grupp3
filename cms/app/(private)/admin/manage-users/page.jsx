@@ -5,9 +5,7 @@ import UserList from './UserList';
 import './admin.css';
 
 export default async function AdminPage() {
-  if (!ServerAdminCheck) {
-    redirect("/");
-  }
+  ServerAdminCheck()
 
   const { data } = await clerkClient.users.getUserList({});
 
