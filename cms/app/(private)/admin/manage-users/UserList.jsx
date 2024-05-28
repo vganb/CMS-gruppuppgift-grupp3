@@ -20,7 +20,7 @@ export default function UserList({ users }) {
         const response = await AddRole(userId, role)
         if (response.success) {
         console.log(`User ${userId} role updated to ${role}`)
-        setStatus(`Promoted user with ID: ${userId} to admin`)
+        setStatus(`Updated the role of user with ID: ${userId}`)
         } else {
         console.error(`Failed to update user ${userId} role to admin`)
         setStatus(`Failed to promote user with ID: ${userId}`);
