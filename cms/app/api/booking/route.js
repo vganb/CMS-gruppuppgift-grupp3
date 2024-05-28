@@ -22,16 +22,9 @@ export async function POST(req) {
     const attendeesData = eventData.attendees || []; 
     const isUserAlreadyBooked = attendeesData.includes(email);
     
-    if(isUserAlreadyBooked && !unbookEvent){
+    if(isUserAlreadyBooked){
       return NextResponse.json({message:'Could not booking another ticket with the same email'})
     }
-
-     if (isUserAlreadyBooked && unbookEvent.includes(email)) {
-
-       await updateDoc(docRef, { attendees: arrayRemove(email) });
-       return NextResponse.json({ message: 'Unbooking successful' });
-     }
-
 
     if (attendeesData.length >= availableSeats) {
       return NextResponse.json({ message: 'Booking is full' }, { status: 400 });
