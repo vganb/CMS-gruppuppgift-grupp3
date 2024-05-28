@@ -31,8 +31,7 @@ export async function POST(req) {
     }
 
     await updateDoc(docRef, { 
-      attendees: arrayUnion(email),
-      seats: increment(-1)
+      attendees: arrayUnion(email)
     });
 
     return NextResponse.json({ message: 'Booking successful' }, { status: 200 });
