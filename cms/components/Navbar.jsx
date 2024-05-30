@@ -19,8 +19,8 @@ const Navbar = () => {
       <div className="flex border-b justify-between bg-slate-600/60">
         <Link href={"/"} className="md:block hidden text-4xl font-bold px-8 py-2">
           <Image src="/klippiz.png"
-            className="rounded border-black"
-            width={50 }
+            className="rounded border-black size-16"
+            width={50}
             height={50}
             alt=""
           
