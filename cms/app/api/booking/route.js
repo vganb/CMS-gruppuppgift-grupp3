@@ -23,11 +23,7 @@ export async function POST(req) {
     const isUserAlreadyBooked = attendeesData.includes(email);
     
     if(isUserAlreadyBooked){
-      // return NextResponse.json({message:'Could not booking another ticket with the same email'})
-      await updateDoc(docRef, { 
-        attendees: arrayRemove(email),
-      });
-      return NextResponse.json({ message: 'Cancellation successful' }, { status: 200 });
+      return NextResponse.json({message:'Could not booking another ticket with the same email'})
     }
 
     if (attendeesData.length >= availableSeats) {
@@ -36,11 +32,8 @@ export async function POST(req) {
 
     await updateDoc(docRef, { 
       attendees: arrayUnion(email),
-      // seats: increment(-1)
+      seats: increment(-1)
     });
-
-    // <p>{event.attendees.length} / {event.seats} Booked</p>
-    // 7 / 10 Booked
 
     return NextResponse.json({ message: 'Booking successful' }, { status: 200 });
 
