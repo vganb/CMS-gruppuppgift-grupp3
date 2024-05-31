@@ -1,9 +1,16 @@
-import { collection,query,getDocs, updateDoc } from "@firebase/firestore";
+import { collection,query,getDocs, updateDoc, where } from "@firebase/firestore";
 import { db } from "@/firebase.config";
 import { NextResponse } from "next/server";
-export async function GET(){
+export async function GET(req){
+    const { searchParams } = new URL(req.url);
     try {
-        const q = query(collection(db,'events'))
+        const email = searchParams.get('email');
+        let q
+        if(email) {
+            q = query(collection(db, "events"), where("attendees", "array-contains", email))
+        } else {
+            q = query(collection(db,'events'))
+        }
         if(!q){
             return NextResponse.json({message:'Could not retrieve data'},{status:500})
         }
