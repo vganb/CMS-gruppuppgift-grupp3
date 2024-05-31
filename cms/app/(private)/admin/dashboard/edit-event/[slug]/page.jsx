@@ -6,6 +6,7 @@ import { collection, doc, getDoc, getDocs, query, where } from "firebase/firesto
 import EditEventForm from "../_components/editEventForm";
 import { db } from "@/firebase.config";
 import { usePathname } from "next/navigation";
+import {ClientAdminCheck} from '@/app/perms/ClientAdminCheck'
 
 
 
@@ -21,6 +22,7 @@ const getEvent = async (eventId) => {
 
 
 const EventPage = () => {
+  ClientAdminCheck()
   const [event, setEvent] = useState(null);
   const url = usePathname();
 

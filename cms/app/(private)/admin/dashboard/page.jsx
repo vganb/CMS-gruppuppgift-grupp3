@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "@/firebase.config";
 import Link from "next/link";
+import {ClientAdminCheck} from '@/app/perms/ClientAdminCheck'
 
 const fetchEvents = async () => {
   const eventsCollection = collection(db, "events");
@@ -14,6 +15,7 @@ const fetchEvents = async () => {
 };
 
 const Dashboard = () => {
+  ClientAdminCheck()
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
